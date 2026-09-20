@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import ScheduleForm from './components/ScheduleForm';
@@ -68,17 +67,12 @@ export default function App() {
   return (
     <div className="flex min-h-screen bg-slate-50">
       {/* Mobile overlay */}
-      <AnimatePresence>
-        {sidebarOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-      </AnimatePresence>
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
       {/* Sidebar - Desktop */}
       <div className="hidden lg:block">
@@ -112,21 +106,13 @@ export default function App() {
             </div>
             <span className="font-bold text-slate-800 text-sm">AgendaFlow</span>
           </div>
-          <div className="w-9" /> {/* Spacer */}
+          <div className="w-9" />
         </div>
 
         {/* View Content */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentView}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-          >
-            {renderView()}
-          </motion.div>
-        </AnimatePresence>
+        <div key={currentView} className="animate-fadeIn">
+          {renderView()}
+        </div>
       </main>
     </div>
   );

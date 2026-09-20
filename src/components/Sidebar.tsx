@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { Calendar, PlusCircle, List, Settings, LayoutDashboard } from 'lucide-react';
 import { ViewMode } from '../types';
 
@@ -43,13 +42,6 @@ export default function Sidebar({ currentView, onViewChange }: SidebarProps) {
                   : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
               }`}
             >
-              {isActive && (
-                <motion.div
-                  layoutId="activeIndicator"
-                  className="absolute left-0 w-1 h-8 bg-emerald-400 rounded-r-full"
-                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                />
-              )}
               <Icon className="w-5 h-5" />
               <span className="font-medium text-sm">{item.label}</span>
             </button>

@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { Calendar, MessageCircle, Clock, CheckCircle, TrendingUp, Users } from 'lucide-react';
 import { Appointment } from '../types';
 import { format, isToday, isTomorrow, parseISO } from 'date-fns';
@@ -16,10 +15,10 @@ export default function Dashboard({ appointments, onNewAppointment }: DashboardP
   const completedAppointments = appointments.filter(a => a.status === 'completed');
 
   const stats = [
-    { label: 'Hoje', value: todayAppointments.length, icon: Clock, color: 'from-blue-500 to-blue-600', bgColor: 'bg-blue-500/10' },
-    { label: 'Pendentes', value: pendingAppointments.length, icon: TrendingUp, color: 'from-amber-500 to-orange-500', bgColor: 'bg-amber-500/10' },
-    { label: 'Confirmados', value: confirmedAppointments.length, icon: CheckCircle, color: 'from-emerald-500 to-green-600', bgColor: 'bg-emerald-500/10' },
-    { label: 'Total', value: appointments.length, icon: Users, color: 'from-purple-500 to-violet-600', bgColor: 'bg-purple-500/10' },
+    { label: 'Hoje', value: todayAppointments.length, icon: Clock, color: '#3b82f6', bgColor: 'bg-blue-500/10' },
+    { label: 'Pendentes', value: pendingAppointments.length, icon: TrendingUp, color: '#f59e0b', bgColor: 'bg-amber-500/10' },
+    { label: 'Confirmados', value: confirmedAppointments.length, icon: CheckCircle, color: '#10b981', bgColor: 'bg-emerald-500/10' },
+    { label: 'Total', value: appointments.length, icon: Users, color: '#8b5cf6', bgColor: 'bg-purple-500/10' },
   ];
 
   const upcomingAppointments = appointments
@@ -28,7 +27,7 @@ export default function Dashboard({ appointments, onNewAppointment }: DashboardP
     .slice(0, 5);
 
   return (
-    <div className="p-6 lg:p-8 max-w-7xl mx-auto">
+    <div className="p-6 lg:p-8 max-w-7xl mx-auto animate-fadeIn">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
@@ -49,21 +48,19 @@ export default function Dashboard({ appointments, onNewAppointment }: DashboardP
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <motion.div
+            <div
               key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow"
+              className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 animate-slideUp"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="flex items-center justify-between mb-3">
                 <div className={`w-10 h-10 rounded-xl ${stat.bgColor} flex items-center justify-center`}>
-                  <Icon className={`w-5 h-5 bg-gradient-to-r ${stat.color} bg-clip-text`} style={{ color: stat.color.includes('blue') ? '#3b82f6' : stat.color.includes('amber') ? '#f59e0b' : stat.color.includes('emerald') ? '#10b981' : '#8b5cf6' }} />
+                  <Icon className="w-5 h-5" style={{ color: stat.color }} />
                 </div>
               </div>
               <p className="text-2xl font-bold text-slate-800">{stat.value}</p>
               <p className="text-sm text-slate-500">{stat.label}</p>
-            </motion.div>
+            </div>
           );
         })}
       </div>
@@ -87,12 +84,10 @@ export default function Dashboard({ appointments, onNewAppointment }: DashboardP
           ) : (
             <div className="space-y-3">
               {upcomingAppointments.map((apt, index) => (
-                <motion.div
+                <div
                   key={apt.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors"
+                  className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors animate-slideRight"
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-sm shadow-sm">
                     {format(parseISO(apt.date), 'dd')}
@@ -116,7 +111,7 @@ export default function Dashboard({ appointments, onNewAppointment }: DashboardP
                       {apt.status === 'confirmed' ? 'Confirmado' : apt.status === 'pending' ? 'Pendente' : apt.status}
                     </span>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           )}

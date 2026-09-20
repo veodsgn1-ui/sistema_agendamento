@@ -1,9 +1,8 @@
-import { motion } from 'framer-motion';
-import { MessageCircle, Calendar, Bell, Globe, Smartphone, Info } from 'lucide-react';
+import { MessageCircle, Calendar, Bell, Info, Smartphone } from 'lucide-react';
 
 export default function Settings() {
   return (
-    <div className="p-6 lg:p-8 max-w-4xl mx-auto">
+    <div className="p-6 lg:p-8 max-w-4xl mx-auto animate-fadeIn">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl lg:text-3xl font-bold text-slate-800">Configurações</h1>
@@ -12,11 +11,7 @@ export default function Settings() {
 
       <div className="space-y-6">
         {/* WhatsApp Integration */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6"
-        >
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 animate-slideUp" style={{ animationDelay: '0ms' }}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
               <MessageCircle className="w-5 h-5 text-green-600" />
@@ -54,15 +49,10 @@ export default function Settings() {
               />
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Google Calendar Integration */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6"
-        >
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 animate-slideUp" style={{ animationDelay: '100ms' }}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
               <Calendar className="w-5 h-5 text-blue-600" />
@@ -100,15 +90,10 @@ export default function Settings() {
               </select>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Notifications */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6"
-        >
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 animate-slideUp" style={{ animationDelay: '200ms' }}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
               <Bell className="w-5 h-5 text-purple-600" />
@@ -141,15 +126,10 @@ export default function Settings() {
               <input type="checkbox" defaultChecked className="w-5 h-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500" />
             </label>
           </div>
-        </motion.div>
+        </div>
 
         {/* Info Box */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100 p-6"
-        >
+        <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100 p-6 animate-slideUp" style={{ animationDelay: '300ms' }}>
           <div className="flex items-start gap-3">
             <Info className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
             <div>
@@ -161,18 +141,14 @@ export default function Settings() {
               </ul>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Save Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
+        <div className="animate-slideUp" style={{ animationDelay: '400ms' }}>
           <button className="px-8 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-200 hover:-translate-y-0.5">
             Salvar Configurações
           </button>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
