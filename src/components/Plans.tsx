@@ -1,5 +1,24 @@
 import { Check, Star, Zap, Crown } from 'lucide-react';
 
+const STORAGE_KEY = 'agendaflow_stripe_config';
+
+interface StripeConfig {
+  enabled: boolean;
+  paymentLinks: {
+    free: string;
+    pro: string;
+    business: string;
+  };
+}
+
+function getStripeConfig(): StripeConfig {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  return stored ? JSON.parse(stored) : {
+    enabled: false,
+    paymentLinks: { free: '', pro: '', business: '' }
+  };
+}
+
 const plans = [
   {
     id: 'free',
@@ -66,32 +85,25 @@ const plans = [
   },
 ];
 
-import { useState } from 'react';
-import Checkout from './Checkout';
-
 export default function Plans() {
-  const [showCheckout, setShowCheckout] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<typeof plans[0] | null>(null);
+  const config = getStripeConfig();
 
-  const handleSelectPlan = (plan: typeof plans[0]) => {
-    setSelectedPlan(plan);
-    setShowCheckout(true);
+  const handleSelectPlan = (planId: string) => {
+    if (!config.enabled) {
+      alert('Sistema de pagamentos não está configurado. Entre em contato com o administrador.');
+      return;
+    }
+
+    const paymentLink = config.paymentLinks[planId as keyof typeof config.paymentLinks];
+    
+    if (!paymentLink) {
+      alert('Link de pagamento não configurado para este plano. Entre em contato com o administrador.');
+      return;
+    }
+
+    // Abre o Payment Link do Stripe em nova aba
+    window.open(paymentLink, '_blank');
   };
-
-  if (showCheckout && selectedPlan) {
-    return (
-      <Checkout
-        planName={selectedPlan.name}
-        planPrice={selectedPlan.price}
-        planPeriod={selectedPlan.period}
-        onSuccess={() => {
-          alert('Pagamento realizado com sucesso! Seu plano foi ativado.');
-          setShowCheckout(false);
-        }}
-        onCancel={() => setShowCheckout(false)}
-      />
-    );
-  }
 
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto animate-fadeIn">
@@ -155,7 +167,7 @@ export default function Plans() {
 
                 {/* CTA Button */}
                 <button
-                  onClick={() => handleSelectPlan(plan)}
+                  onClick={() => handleSelectPlan(plan.id)}
                   className={`w-full py-3 rounded-xl font-medium transition-all ${
                     plan.highlighted
                       ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:-translate-y-0.5'
@@ -221,7 +233,7 @@ export default function Plans() {
           <div>
             <h3 className="font-semibold text-slate-800 mb-2">Quais formas de pagamento são aceitas?</h3>
             <p className="text-sm text-slate-600">
-              Aceitamos cartão de crédito, débito, PIX e boleto bancário. O pagamento é processado de forma segura.
+              Aceitamos cartão de crédito, débito, PIX e boleto bancário. O pagamento é processado de forma segura pelo Stripe.
             </p>
           </div>
         </div>

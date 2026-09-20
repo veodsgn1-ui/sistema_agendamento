@@ -1,18 +1,20 @@
 import { useState } from 'react';
-import { X, Lock, CreditCard, Key, ExternalLink, CheckCircle, AlertCircle, Shield } from 'lucide-react';
+import { X, Lock, CreditCard, Link, ExternalLink, CheckCircle, AlertCircle, Shield } from 'lucide-react';
 
 interface AdminPanelProps {
   onClose: () => void;
 }
 
 interface StripeConfig {
-  publicKey: string;
-  secretKey: string;
-  webhookSecret: string;
   enabled: boolean;
+  paymentLinks: {
+    free: string;
+    pro: string;
+    business: string;
+  };
 }
 
-const ADMIN_PASSWORD = 'admin123'; // Em produção, use variável de ambiente
+const ADMIN_PASSWORD = 'admin123';
 const STORAGE_KEY = 'agendaflow_stripe_config';
 
 export default function AdminPanel({ onClose }: AdminPanelProps) {
@@ -22,13 +24,14 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
   const [config, setConfig] = useState<StripeConfig>(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     return stored ? JSON.parse(stored) : {
-      publicKey: '',
-      secretKey: '',
-      webhookSecret: '',
       enabled: false,
+      paymentLinks: {
+        free: '',
+        pro: '',
+        business: '',
+      },
     };
   });
-  const [showSecret, setShowSecret] = useState(false);
   const [saved, setSaved] = useState(false);
 
   const handleLogin = () => {
@@ -48,6 +51,13 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
 
   const updateConfig = (updates: Partial<StripeConfig>) => {
     setConfig(prev => ({ ...prev, ...updates }));
+  };
+
+  const updatePaymentLink = (plan: keyof StripeConfig['paymentLinks'], value: string) => {
+    setConfig(prev => ({
+      ...prev,
+      paymentLinks: { ...prev.paymentLinks, [plan]: value }
+    }));
   };
 
   if (!isAuthenticated) {
@@ -97,7 +107,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     );
   }
 
-  const isConfigured = config.publicKey && config.secretKey;
+  const isConfigured = config.paymentLinks.pro && config.paymentLinks.business;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
@@ -108,7 +118,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
             <Shield className="w-6 h-6 text-emerald-600" />
             <div>
               <h2 className="text-xl font-bold text-slate-800">Painel Administrativo</h2>
-              <p className="text-sm text-slate-500">Configuração do sistema de pagamentos</p>
+              <p className="text-sm text-slate-500">Configuração de pagamentos</p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-lg">
@@ -132,12 +142,12 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
               )}
               <div>
                 <h3 className={`font-semibold ${isConfigured ? 'text-emerald-800' : 'text-amber-800'}`}>
-                  {isConfigured ? 'Stripe Configurado' : 'Configuração Pendente'}
+                  {isConfigured ? 'Pagamentos Configurados' : 'Configuração Pendente'}
                 </h3>
                 <p className={`text-sm mt-1 ${isConfigured ? 'text-emerald-700' : 'text-amber-700'}`}>
                   {isConfigured 
-                    ? 'Seu sistema está pronto para receber pagamentos.'
-                    : 'Configure suas chaves API para começar a receber pagamentos.'}
+                    ? 'Seus links de pagamento estão prontos para uso.'
+                    : 'Configure os Payment Links do Stripe para começar a receber pagamentos.'}
                 </p>
               </div>
             </div>
@@ -162,68 +172,63 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
             </div>
           </div>
 
-          {/* API Keys */}
+          {/* Payment Links */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <Key className="w-5 h-5 text-emerald-500" />
-              <h3 className="font-semibold text-slate-800">Chaves API do Stripe</h3>
+              <Link className="w-5 h-5 text-emerald-500" />
+              <h3 className="font-semibold text-slate-800">Payment Links do Stripe</h3>
+            </div>
+
+            <div className="p-4 bg-blue-50 rounded-xl border border-blue-100">
+              <p className="text-sm text-blue-800 font-medium mb-2">💡 Como criar Payment Links</p>
+              <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+                <li>Acesse o <a href="https://dashboard.stripe.com" target="_blank" rel="noopener noreferrer" className="underline">Dashboard do Stripe</a></li>
+                <li>Vá em <strong>Payment Links</strong> → <strong>+ New</strong></li>
+                <li>Configure o produto (nome, preço, recorrência)</li>
+                <li>Copie o link gerado e cole abaixo</li>
+              </ol>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                Chave Pública (Publishable Key)
+                Link do Plano Gratuito
               </label>
               <input
-                type="text"
-                value={config.publicKey}
-                onChange={(e) => updateConfig({ publicKey: e.target.value })}
-                placeholder="pk_test_..."
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none font-mono text-sm"
+                type="url"
+                value={config.paymentLinks.free}
+                onChange={(e) => updatePaymentLink('free', e.target.value)}
+                placeholder="https://buy.stripe.com/..."
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none text-sm"
               />
               <p className="text-xs text-slate-500 mt-1">
-                Começa com "pk_test_" ou "pk_live_"
+                Opcional - pode deixar vazio se não quiser oferecer plano gratuito
               </p>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                Chave Secreta (Secret Key)
-              </label>
-              <div className="relative">
-                <input
-                  type={showSecret ? 'text' : 'password'}
-                  value={config.secretKey}
-                  onChange={(e) => updateConfig({ secretKey: e.target.value })}
-                  placeholder="sk_test_..."
-                  className="w-full px-4 py-2.5 pr-20 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none font-mono text-sm"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowSecret(!showSecret)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-emerald-600 hover:text-emerald-700 font-medium"
-                >
-                  {showSecret ? 'Ocultar' : 'Mostrar'}
-                </button>
-              </div>
-              <p className="text-xs text-slate-500 mt-1">
-                Começa com "sk_test_" ou "sk_live_" - Mantenha em segredo!
-              </p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                Webhook Secret (opcional)
+                Link do Plano Profissional (R$ 49,90/mês)
               </label>
               <input
-                type="password"
-                value={config.webhookSecret}
-                onChange={(e) => updateConfig({ webhookSecret: e.target.value })}
-                placeholder="whsec_..."
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none font-mono text-sm"
+                type="url"
+                value={config.paymentLinks.pro}
+                onChange={(e) => updatePaymentLink('pro', e.target.value)}
+                placeholder="https://buy.stripe.com/..."
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none text-sm"
               />
-              <p className="text-xs text-slate-500 mt-1">
-                Para validar webhooks do Stripe (recomendado para produção)
-              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                Link do Plano Empresarial (R$ 149,90/mês)
+              </label>
+              <input
+                type="url"
+                value={config.paymentLinks.business}
+                onChange={(e) => updatePaymentLink('business', e.target.value)}
+                placeholder="https://buy.stripe.com/..."
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none text-sm"
+              />
             </div>
           </div>
 
@@ -242,48 +247,37 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
             )}
           </button>
 
-          {/* Setup Guide */}
+          {/* How it works */}
           <div className="bg-slate-50 rounded-xl p-4">
-            <h3 className="font-semibold text-slate-800 mb-3">📖 Como configurar</h3>
-            <div className="space-y-3">
-              <div className="flex gap-2">
-                <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold flex-shrink-0">1</div>
-                <div className="text-sm text-slate-700">
-                  Crie uma conta em{' '}
-                  <a href="https://dashboard.stripe.com/register" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:text-emerald-700">
-                    dashboard.stripe.com/register
-                  </a>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold flex-shrink-0">2</div>
-                <div className="text-sm text-slate-700">
-                  Vá em Developers → API keys
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold flex-shrink-0">3</div>
-                <div className="text-sm text-slate-700">
-                  Copie e cole as chaves acima
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold flex-shrink-0">4</div>
-                <div className="text-sm text-slate-700">
-                  Teste com: 4242 4242 4242 4242
-                </div>
-              </div>
+            <h3 className="font-semibold text-slate-800 mb-3">🎯 Como funciona</h3>
+            <div className="space-y-2 text-sm text-slate-700">
+              <p>1. Cliente clica em "Assinar Agora" no plano desejado</p>
+              <p>2. Sistema abre o Payment Link do Stripe em nova aba</p>
+              <p>3. Cliente completa o pagamento no Stripe</p>
+              <p>4. Stripe processa e você recebe o pagamento</p>
+              <p>5. <strong>Importante:</strong> Você precisa ativar manualmente o acesso do cliente no sistema após confirmar o pagamento</p>
             </div>
+          </div>
+
+          {/* Advantages */}
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+            <p className="text-sm text-emerald-800 font-medium mb-2">✅ Vantagens desta abordagem</p>
+            <ul className="text-sm text-emerald-700 space-y-1">
+              <li>• Não precisa de backend complexo</li>
+              <li>• Pagamentos seguros processados pelo Stripe</li>
+              <li>• Suporte a cartão, PIX e boleto automaticamente</li>
+              <li>• Você controla tudo pelo dashboard do Stripe</li>
+              <li>• Funciona imediatamente após configurar</li>
+            </ul>
           </div>
 
           {/* Security Notice */}
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-            <p className="text-xs text-amber-800 font-medium mb-2">⚠️ Segurança</p>
+            <p className="text-xs text-amber-800 font-medium mb-2">⚠️ Próximos passos</p>
             <ul className="text-xs text-amber-700 space-y-1">
-              <li>• Estas chaves são armazenadas localmente no navegador</li>
-              <li>• Em produção, mova para variáveis de ambiente no servidor</li>
-              <li>• Nunca compartilhe sua chave secreta</li>
-              <li>• Use chaves de teste (pk_test_/sk_test_) durante desenvolvimento</li>
+              <li>• Para automação completa (ativação automática), será necessário implementar webhooks</li>
+              <li>• Isso requer um backend (Node.js, Python, etc.)</li>
+              <li>• Por enquanto, ative manualmente os clientes após confirmar pagamento</li>
             </ul>
           </div>
         </div>
