@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Menu } from 'lucide-react';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import ScheduleForm from './components/ScheduleForm';
 import AppointmentList from './components/AppointmentList';
+import Collaborators from './components/Collaborators';
+import Plans from './components/Plans';
 import Settings from './components/Settings';
 import { Appointment, ViewMode } from './types';
 
@@ -22,10 +25,11 @@ function saveAppointments(appointments: Appointment[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appointments));
 }
 
-export default function App() {
+function AppContent() {
   const [currentView, setCurrentView] = useState<ViewMode>('dashboard');
   const [appointments, setAppointments] = useState<Appointment[]>(loadAppointments);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { theme } = useTheme();
 
   useEffect(() => {
     saveAppointments(appointments);
@@ -57,6 +61,10 @@ export default function App() {
             onDelete={handleDeleteAppointment}
           />
         );
+      case 'collaborators':
+        return <Collaborators />;
+      case 'plans':
+        return <Plans />;
       case 'settings':
         return <Settings />;
       default:
@@ -101,10 +109,17 @@ export default function App() {
             <Menu className="w-5 h-5 text-slate-700" />
           </button>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-gradient-to-br from-emerald-400 to-teal-600 rounded-lg flex items-center justify-center">
-              <span className="text-white text-xs font-bold">A</span>
-            </div>
-            <span className="font-bold text-slate-800 text-sm">AgendaFlow</span>
+            {theme.logo ? (
+              <img src={theme.logo} alt="Logo" className="w-7 h-7 object-contain rounded-lg" />
+            ) : (
+              <div 
+                className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold"
+                style={{ background: `linear-gradient(135deg, ${theme.primaryColor}, ${theme.secondaryColor})` }}
+              >
+                {theme.companyName.charAt(0)}
+              </div>
+            )}
+            <span className="font-bold text-slate-800 text-sm">{theme.companyName}</span>
           </div>
           <div className="w-9" />
         </div>
@@ -115,5 +130,13 @@ export default function App() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }

@@ -1,4 +1,5 @@
 import { MessageCircle, Calendar, Bell, Info, Smartphone } from 'lucide-react';
+import ThemeCustomizer from './ThemeCustomizer';
 
 export default function Settings() {
   return (
@@ -6,12 +7,15 @@ export default function Settings() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl lg:text-3xl font-bold text-slate-800">Configurações</h1>
-        <p className="text-slate-500 mt-1">Configure as integrações e preferências do sistema</p>
+        <p className="text-slate-500 mt-1">Personalize e configure o sistema</p>
       </div>
 
       <div className="space-y-6">
+        {/* Theme Customizer */}
+        <ThemeCustomizer />
+
         {/* WhatsApp Integration */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 animate-slideUp" style={{ animationDelay: '0ms' }}>
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 animate-slideUp" style={{ animationDelay: '100ms' }}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
               <MessageCircle className="w-5 h-5 text-green-600" />
@@ -52,7 +56,7 @@ export default function Settings() {
         </div>
 
         {/* Google Calendar Integration */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 animate-slideUp" style={{ animationDelay: '100ms' }}>
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 animate-slideUp" style={{ animationDelay: '200ms' }}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
               <Calendar className="w-5 h-5 text-blue-600" />
@@ -93,7 +97,7 @@ export default function Settings() {
         </div>
 
         {/* Notifications */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 animate-slideUp" style={{ animationDelay: '200ms' }}>
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 animate-slideUp" style={{ animationDelay: '300ms' }}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
               <Bell className="w-5 h-5 text-purple-600" />
@@ -129,7 +133,7 @@ export default function Settings() {
         </div>
 
         {/* Info Box */}
-        <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100 p-6 animate-slideUp" style={{ animationDelay: '300ms' }}>
+        <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100 p-6 animate-slideUp" style={{ animationDelay: '400ms' }}>
           <div className="flex items-start gap-3">
             <Info className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
             <div>
@@ -141,13 +145,6 @@ export default function Settings() {
               </ul>
             </div>
           </div>
-        </div>
-
-        {/* Save Button */}
-        <div className="animate-slideUp" style={{ animationDelay: '400ms' }}>
-          <button className="px-8 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-200 hover:-translate-y-0.5">
-            Salvar Configurações
-          </button>
         </div>
       </div>
     </div>

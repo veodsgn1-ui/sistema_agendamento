@@ -2,6 +2,7 @@ import { Calendar, MessageCircle, Clock, CheckCircle, TrendingUp, Users } from '
 import { Appointment } from '../types';
 import { format, isToday, isTomorrow, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface DashboardProps {
   appointments: Appointment[];
@@ -9,6 +10,7 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ appointments, onNewAppointment }: DashboardProps) {
+  const { theme } = useTheme();
   const todayAppointments = appointments.filter(a => isToday(parseISO(a.date)));
   const pendingAppointments = appointments.filter(a => a.status === 'pending');
   const confirmedAppointments = appointments.filter(a => a.status === 'confirmed');
@@ -36,7 +38,11 @@ export default function Dashboard({ appointments, onNewAppointment }: DashboardP
         </div>
         <button
           onClick={onNewAppointment}
-          className="mt-4 sm:mt-0 inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-medium shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-200 hover:-translate-y-0.5"
+          className="mt-4 sm:mt-0 inline-flex items-center gap-2 px-5 py-2.5 text-white rounded-xl font-medium shadow-lg transition-all duration-200 hover:-translate-y-0.5"
+          style={{ 
+            background: `linear-gradient(135deg, ${theme.primaryColor}, ${theme.secondaryColor})`,
+            boxShadow: `0 10px 15px -3px ${theme.primaryColor}40`
+          }}
         >
           <Calendar className="w-4 h-4" />
           Novo Agendamento
