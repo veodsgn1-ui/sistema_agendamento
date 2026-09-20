@@ -66,7 +66,33 @@ const plans = [
   },
 ];
 
+import { useState } from 'react';
+import Checkout from './Checkout';
+
 export default function Plans() {
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<typeof plans[0] | null>(null);
+
+  const handleSelectPlan = (plan: typeof plans[0]) => {
+    setSelectedPlan(plan);
+    setShowCheckout(true);
+  };
+
+  if (showCheckout && selectedPlan) {
+    return (
+      <Checkout
+        planName={selectedPlan.name}
+        planPrice={selectedPlan.price}
+        planPeriod={selectedPlan.period}
+        onSuccess={() => {
+          alert('Pagamento realizado com sucesso! Seu plano foi ativado.');
+          setShowCheckout(false);
+        }}
+        onCancel={() => setShowCheckout(false)}
+      />
+    );
+  }
+
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto animate-fadeIn">
       {/* Header */}
@@ -129,6 +155,7 @@ export default function Plans() {
 
                 {/* CTA Button */}
                 <button
+                  onClick={() => handleSelectPlan(plan)}
                   className={`w-full py-3 rounded-xl font-medium transition-all ${
                     plan.highlighted
                       ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:-translate-y-0.5'

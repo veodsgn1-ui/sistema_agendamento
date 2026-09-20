@@ -1,5 +1,6 @@
-import { MessageCircle, Calendar, Bell, Info, Smartphone } from 'lucide-react';
+import { MessageCircle, Calendar, Bell, Info, Smartphone, CreditCard } from 'lucide-react';
 import ThemeCustomizer from './ThemeCustomizer';
+import PaymentSettings from './PaymentSettings';
 
 export default function Settings() {
   return (
@@ -13,6 +14,20 @@ export default function Settings() {
       <div className="space-y-6">
         {/* Theme Customizer */}
         <ThemeCustomizer />
+
+        {/* Payment Settings */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+              <CreditCard className="w-5 h-5 text-purple-600" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-slate-800">Sistema de Pagamentos</h3>
+              <p className="text-sm text-slate-500">Configure Stripe para receber assinaturas</p>
+            </div>
+          </div>
+          <PaymentSettings />
+        </div>
 
         {/* WhatsApp Integration */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 animate-slideUp" style={{ animationDelay: '100ms' }}>
