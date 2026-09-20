@@ -12,6 +12,7 @@ export interface Appointment {
   calendarSynced: boolean;
   createdAt: string;
   collaboratorId?: string;
+  anamnesisData?: Record<string, string>;
 }
 
 export interface Service {
@@ -20,6 +21,7 @@ export interface Service {
   duration: number;
   price: number;
   color: string;
+  description?: string;
 }
 
 export interface Collaborator {
@@ -39,6 +41,63 @@ export interface ThemeConfig {
   companyName: string;
 }
 
+export interface AnamnesisField {
+  id: string;
+  label: string;
+  type: 'text' | 'textarea' | 'select' | 'radio' | 'checkbox' | 'date';
+  required: boolean;
+  options?: string[];
+  placeholder?: string;
+}
+
+export interface PublicPageConfig {
+  enabled: boolean;
+  slug: string;
+  companyName: string;
+  logo?: string;
+  primaryColor: string;
+  secondaryColor: string;
+  welcomeTitle: string;
+  welcomeSubtitle: string;
+  aboutText: string;
+  address: string;
+  phone: string;
+  services: PublicService[];
+  anamnesisEnabled: boolean;
+  anamnesisTitle: string;
+  anamnesisFields: AnamnesisField[];
+  businessHours: BusinessHours;
+  socialLinks: {
+    instagram?: string;
+    facebook?: string;
+    website?: string;
+  };
+}
+
+export interface PublicService {
+  id: string;
+  name: string;
+  duration: number;
+  price: number;
+  description: string;
+  enabled: boolean;
+}
+
+export interface BusinessHours {
+  monday: TimeSlot[];
+  tuesday: TimeSlot[];
+  wednesday: TimeSlot[];
+  thursday: TimeSlot[];
+  friday: TimeSlot[];
+  saturday: TimeSlot[];
+  sunday: TimeSlot[];
+}
+
+export interface TimeSlot {
+  start: string;
+  end: string;
+}
+
 export interface Plan {
   id: string;
   name: string;
@@ -48,4 +107,4 @@ export interface Plan {
   highlighted?: boolean;
 }
 
-export type ViewMode = 'dashboard' | 'schedule' | 'appointments' | 'collaborators' | 'plans' | 'settings';
+export type ViewMode = 'dashboard' | 'schedule' | 'appointments' | 'collaborators' | 'plans' | 'settings' | 'public-page';

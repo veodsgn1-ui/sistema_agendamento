@@ -1,4 +1,4 @@
-import { Calendar, PlusCircle, List, Settings, LayoutDashboard, Users, CreditCard } from 'lucide-react';
+import { Calendar, PlusCircle, List, Settings, LayoutDashboard, Users, CreditCard, Globe } from 'lucide-react';
 import { ViewMode } from '../types';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -11,6 +11,7 @@ const menuItems = [
   { id: 'dashboard' as ViewMode, label: 'Dashboard', icon: LayoutDashboard },
   { id: 'schedule' as ViewMode, label: 'Novo Agendamento', icon: PlusCircle },
   { id: 'appointments' as ViewMode, label: 'Agendamentos', icon: List },
+  { id: 'public-page' as ViewMode, label: 'Página Online', icon: Globe },
   { id: 'collaborators' as ViewMode, label: 'Colaboradores', icon: Users },
   { id: 'plans' as ViewMode, label: 'Planos', icon: CreditCard },
   { id: 'settings' as ViewMode, label: 'Configurações', icon: Settings },

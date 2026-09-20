@@ -8,6 +8,7 @@ import AppointmentList from './components/AppointmentList';
 import Collaborators from './components/Collaborators';
 import Plans from './components/Plans';
 import Settings from './components/Settings';
+import PublicPageSettings from './components/PublicPageSettings';
 import { Appointment, ViewMode } from './types';
 
 const STORAGE_KEY = 'agendaflow_appointments';
@@ -65,6 +66,8 @@ function AppContent() {
         return <Collaborators />;
       case 'plans':
         return <Plans />;
+      case 'public-page':
+        return <PublicPageSettings />;
       case 'settings':
         return <Settings />;
       default:
