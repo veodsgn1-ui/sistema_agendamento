@@ -147,7 +147,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
                 <p className={`text-sm mt-1 ${isConfigured ? 'text-emerald-700' : 'text-amber-700'}`}>
                   {isConfigured 
                     ? 'Seus links de pagamento estão prontos para uso.'
-                    : 'Configure os Payment Links do Stripe para começar a receber pagamentos.'}
+                    : 'Configure os Links de Pagamento do Stripe para começar a receber pagamentos.'}
                 </p>
               </div>
             </div>
@@ -176,17 +176,50 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <Link className="w-5 h-5 text-emerald-500" />
-              <h3 className="font-semibold text-slate-800">Payment Links do Stripe</h3>
+              <h3 className="font-semibold text-slate-800">Links de Pagamento do Stripe</h3>
             </div>
 
             <div className="p-4 bg-blue-50 rounded-xl border border-blue-100">
-              <p className="text-sm text-blue-800 font-medium mb-2">💡 Como criar Payment Links</p>
-              <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
-                <li>Acesse o <a href="https://dashboard.stripe.com" target="_blank" rel="noopener noreferrer" className="underline">Dashboard do Stripe</a></li>
-                <li>Vá em <strong>Payment Links</strong> → <strong>+ New</strong></li>
-                <li>Configure o produto (nome, preço, recorrência)</li>
-                <li>Copie o link gerado e cole abaixo</li>
+              <p className="text-sm text-blue-800 font-medium mb-3">💡 Como criar Links de Pagamento no Stripe</p>
+              <ol className="text-sm text-blue-700 space-y-2 list-decimal list-inside">
+                <li>
+                  Acesse o <a href="https://dashboard.stripe.com" target="_blank" rel="noopener noreferrer" className="underline font-medium">Painel do Stripe</a>
+                </li>
+                <li>
+                  No menu lateral esquerdo, clique em <strong>Links de pagamento</strong>
+                </li>
+                <li>
+                  Clique no botão <strong>+ Novo</strong> (canto superior direito)
+                </li>
+                <li>
+                  Na seção <strong>Produtos</strong>, clique em <strong>+ Adicionar produto</strong>
+                </li>
+                <li>
+                  Preencha os campos:
+                  <ul className="ml-4 mt-1 space-y-1 list-disc">
+                    <li><strong>Nome do produto:</strong> Ex: "AgendaFlow - Plano Profissional"</li>
+                    <li><strong>Descrição:</strong> Ex: "Acesso completo ao sistema de agendamento"</li>
+                    <li><strong>Preço:</strong> Ex: "R$ 49,90"</li>
+                    <li><strong>Cobrança:</strong> Selecione <strong>Recorrente</strong></li>
+                    <li><strong>Intervalo de cobrança:</strong> Selecione <strong>Mensal</strong></li>
+                  </ul>
+                </li>
+                <li>
+                  Clique em <strong>Próximo</strong>
+                </li>
+                <li>
+                  Na tela de personalização, clique em <strong>Próximo</strong> (pode manter o padrão)
+                </li>
+                <li>
+                  Clique em <strong>Criar link</strong>
+                </li>
+                <li>
+                  <strong>Copie o link gerado</strong> (começa com https://buy.stripe.com/...) e cole no campo correspondente abaixo
+                </li>
               </ol>
+              <p className="text-xs text-blue-600 mt-3 font-medium">
+                💡 Repita o processo para cada plano (Profissional e Empresarial)
+              </p>
             </div>
 
             <div>
@@ -252,7 +285,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
             <h3 className="font-semibold text-slate-800 mb-3">🎯 Como funciona</h3>
             <div className="space-y-2 text-sm text-slate-700">
               <p>1. Cliente clica em "Assinar Agora" no plano desejado</p>
-              <p>2. Sistema abre o Payment Link do Stripe em nova aba</p>
+              <p>2. Sistema abre o Link de Pagamento do Stripe em nova aba</p>
               <p>3. Cliente completa o pagamento no Stripe</p>
               <p>4. Stripe processa e você recebe o pagamento</p>
               <p>5. <strong>Importante:</strong> Você precisa ativar manualmente o acesso do cliente no sistema após confirmar o pagamento</p>
@@ -266,18 +299,20 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
               <li>• Não precisa de backend complexo</li>
               <li>• Pagamentos seguros processados pelo Stripe</li>
               <li>• Suporte a cartão, PIX e boleto automaticamente</li>
-              <li>• Você controla tudo pelo dashboard do Stripe</li>
+              <li>• Você controla tudo pelo painel do Stripe</li>
               <li>• Funciona imediatamente após configurar</li>
             </ul>
           </div>
 
           {/* Security Notice */}
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-            <p className="text-xs text-amber-800 font-medium mb-2">⚠️ Próximos passos</p>
+            <p className="text-xs text-amber-800 font-medium mb-2">⚠️ Observações importantes</p>
             <ul className="text-xs text-amber-700 space-y-1">
-              <li>• Para automação completa (ativação automática), será necessário implementar webhooks</li>
-              <li>• Isso requer um backend (Node.js, Python, etc.)</li>
-              <li>• Por enquanto, ative manualmente os clientes após confirmar pagamento</li>
+              <li>• Após criar os links, você pode encontrá-los em <strong>Links de pagamento</strong> no painel do Stripe</li>
+              <li>• Para automação completa (ativação automática de clientes), será necessário implementar webhooks</li>
+              <li>• Isso requer um backend (Node.js, Python, etc.) e conhecimento técnico avançado</li>
+              <li>• Por enquanto, ative manualmente os clientes após confirmar o pagamento no painel do Stripe</li>
+              <li>• Para testar, use o modo de teste do Stripe e o cartão: 4242 4242 4242 4242</li>
             </ul>
           </div>
         </div>
