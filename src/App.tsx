@@ -9,6 +9,7 @@ import Collaborators from './components/Collaborators';
 import Plans from './components/Plans';
 import Settings from './components/Settings';
 import PublicPageSettings from './components/PublicPageSettings';
+import AdminPanel from './components/AdminPanel';
 import { Appointment, ViewMode } from './types';
 
 const STORAGE_KEY = 'agendaflow_appointments';
@@ -30,6 +31,7 @@ function AppContent() {
   const [currentView, setCurrentView] = useState<ViewMode>('dashboard');
   const [appointments, setAppointments] = useState<Appointment[]>(loadAppointments);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -102,7 +104,7 @@ function AppContent() {
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 min-h-screen overflow-auto">
+      <main className="flex-1 min-h-screen overflow-auto flex flex-col">
         {/* Mobile Header */}
         <div className="lg:hidden sticky top-0 z-30 bg-white/80 backdrop-blur-lg border-b border-slate-100 px-4 py-3 flex items-center justify-between">
           <button
@@ -128,10 +130,31 @@ function AppContent() {
         </div>
 
         {/* View Content */}
-        <div key={currentView} className="animate-fadeIn">
+        <div key={currentView} className="animate-fadeIn flex-1">
           {renderView()}
         </div>
+
+        {/* Footer with Secret Admin Button */}
+        <footer className="border-t border-slate-100 bg-white py-4 px-6">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <p className="text-xs text-slate-400">
+              © 2026 {theme.companyName}. Todos os direitos reservados.
+            </p>
+            <button
+              onClick={() => setShowAdminPanel(true)}
+              className="text-xs text-slate-300 hover:text-slate-500 transition-colors"
+              title="Admin"
+            >
+              v1.0.0
+            </button>
+          </div>
+        </footer>
       </main>
+
+      {/* Admin Panel Modal */}
+      {showAdminPanel && (
+        <AdminPanel onClose={() => setShowAdminPanel(false)} />
+      )}
     </div>
   );
 }

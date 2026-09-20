@@ -1,6 +1,5 @@
 import { MessageCircle, Calendar, Bell, Info, Smartphone, CreditCard } from 'lucide-react';
 import ThemeCustomizer from './ThemeCustomizer';
-import PaymentSettings from './PaymentSettings';
 
 export default function Settings() {
   return (
@@ -15,18 +14,39 @@ export default function Settings() {
         {/* Theme Customizer */}
         <ThemeCustomizer />
 
-        {/* Payment Settings */}
+        {/* Payment Info for Users */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-              <CreditCard className="w-5 h-5 text-purple-600" />
+            <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+              <CreditCard className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-slate-800">Sistema de Pagamentos</h3>
-              <p className="text-sm text-slate-500">Configure Stripe para receber assinaturas</p>
+              <h3 className="font-semibold text-slate-800">Pagamentos</h3>
+              <p className="text-sm text-slate-500">Informações sobre assinaturas</p>
             </div>
           </div>
-          <PaymentSettings />
+          <div className="space-y-4">
+            <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+              <p className="text-sm text-emerald-800 font-medium mb-2">💳 Formas de Pagamento Aceitas</p>
+              <ul className="text-sm text-emerald-700 space-y-1">
+                <li>• Cartão de crédito (até 12x)</li>
+                <li>• PIX (pagamento instantâneo)</li>
+                <li>• Boleto bancário</li>
+              </ul>
+            </div>
+            <div className="p-4 bg-blue-50 rounded-xl border border-blue-100">
+              <p className="text-sm text-blue-800 font-medium mb-2">🔒 Segurança</p>
+              <p className="text-sm text-blue-700">
+                Todos os pagamentos são processados de forma segura pelo Stripe, 
+                líder global em pagamentos online. Seus dados estão protegidos.
+              </p>
+            </div>
+            <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+              <p className="text-sm text-slate-700">
+                Para gerenciar sua assinatura, acesse a página de <strong>Planos</strong> no menu lateral.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* WhatsApp Integration */}
