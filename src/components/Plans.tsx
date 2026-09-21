@@ -86,15 +86,20 @@ const plans = [
 ];
 
 export default function Plans() {
-  const config = getStripeConfig();
-
   const handleSelectPlan = (planId: string) => {
+    // Lê a configuração fresca do localStorage toda vez
+    const config = getStripeConfig();
+    
+    console.log('Configuração atual:', config);
+    
     if (!config.enabled) {
       alert('Sistema de pagamentos não está configurado. Entre em contato com o administrador.');
       return;
     }
 
     const paymentLink = config.paymentLinks[planId as keyof typeof config.paymentLinks];
+    
+    console.log('Link para o plano', planId, ':', paymentLink);
     
     if (!paymentLink) {
       alert('Link de pagamento não configurado para este plano. Entre em contato com o administrador.');
@@ -105,8 +110,29 @@ export default function Plans() {
     window.open(paymentLink, '_blank');
   };
 
+  // Lê a configuração para mostrar o status
+  const config = getStripeConfig();
+  const isConfigured = config.enabled && config.paymentLinks?.pro && config.paymentLinks?.business;
+
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto animate-fadeIn">
+      {/* Status Banner */}
+      {!isConfigured && (
+        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+          <p className="text-sm text-amber-800">
+            ⚠️ <strong>Sistema de pagamentos não configurado.</strong> Os links de pagamento ainda não foram configurados.
+          </p>
+        </div>
+      )}
+      
+      {isConfigured && (
+        <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+          <p className="text-sm text-emerald-800">
+            ✅ <strong>Sistema de pagamentos ativo.</strong> Todos os links estão configurados e prontos para uso.
+          </p>
+        </div>
+      )}
+
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-3xl lg:text-4xl font-bold text-slate-800 mb-4">
