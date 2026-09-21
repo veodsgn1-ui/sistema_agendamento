@@ -34,6 +34,9 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
   });
   const [saved, setSaved] = useState(false);
 
+  // Debug: confirmar que o modal abriu
+  console.log('AdminPanel renderizado - isAuthenticated:', isAuthenticated);
+
   const handleLogin = () => {
     if (password === ADMIN_PASSWORD) {
       setIsAuthenticated(true);

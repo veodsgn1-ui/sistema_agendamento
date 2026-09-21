@@ -142,10 +142,10 @@ function AppContent() {
             </p>
             <button
               onClick={() => setShowAdminPanel(true)}
-              className="text-xs text-slate-300 hover:text-slate-500 transition-colors"
-              title="Admin"
+              className="text-xs text-slate-500 hover:text-emerald-600 hover:underline transition-all cursor-pointer"
+              title="Clique para acessar o painel administrativo"
             >
-              v1.0.0
+              🔧 Configurações Admin
             </button>
           </div>
         </footer>
