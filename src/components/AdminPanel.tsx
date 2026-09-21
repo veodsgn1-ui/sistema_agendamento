@@ -22,8 +22,20 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [config, setConfig] = useState<StripeConfig>(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        // Valida se tem a estrutura correta
+        if (parsed && parsed.paymentLinks) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.error('Erro ao carregar config:', e);
+    }
+    // Retorna config padrão se não tiver dados válidos
+    return {
       enabled: false,
       paymentLinks: {
         free: '',
@@ -110,7 +122,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     );
   }
 
-  const isConfigured = config.paymentLinks.pro && config.paymentLinks.business;
+  const isConfigured = config?.paymentLinks?.pro && config?.paymentLinks?.business;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
